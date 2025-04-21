@@ -1,0 +1,20 @@
+name: EnderPearlHCN
+version: 0.0.1
+main: com.wish.EnderPearlHCN
+description: Plugin para añadir cooldown a las ender pearls
+author: wwishhdev
+softdepend: [PlaceholderAPI]
+commands:
+  enderpearlhcn:
+    description: Comando principal del plugin
+    aliases: [epearl, ep]
+    permission: enderpearlhcn.command
+    usage: /<command> [reload]
+
+permissions:
+  enderpearlhcn.command:
+    description: Permite usar el comando principal
+    default: true
+  enderpearlhcn.reload:
+    description: Permite recargar la configuración del plugin
+    default: op

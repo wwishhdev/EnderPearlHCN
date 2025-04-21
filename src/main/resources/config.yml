@@ -1,0 +1,9 @@
+cooldown: 10
+
+messages:
+  # %time% - Tiempo restante en segundos
+  cooldown: "&cDebes esperar &e%time% segundos &cpara usar otra Ender Pearl!"
+
+  cooldownExpired: "&aYa puedes lanzar otra Ender Pearl!"
+
+  reloadSuccess: "&aConfiguración recargada correctamente!"
