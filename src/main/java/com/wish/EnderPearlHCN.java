@@ -25,6 +25,7 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
     private int cooldownTime;
     private String cooldownMessage;
     private String cooldownExpiredMessage;
+    private String placeholderNoCooldown;
 
     @Override
     public void onEnable() {
@@ -70,6 +71,9 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
         if (!config.contains("messages.reloadSuccess")) {
             config.set("messages.reloadSuccess", "&aConfiguración recargada correctamente!");
         }
+        if (!config.contains("placeholder.noCooldown")) {
+            config.set("placeholder.noCooldown", "Sin cooldown");
+        }
 
         saveConfig();
 
@@ -77,6 +81,7 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
         cooldownTime = config.getInt("cooldown");
         cooldownMessage = ChatColor.translateAlternateColorCodes('&', config.getString("messages.cooldown"));
         cooldownExpiredMessage = ChatColor.translateAlternateColorCodes('&', config.getString("messages.cooldownExpired"));
+        placeholderNoCooldown = config.getString("placeholder.noCooldown");
     }
 
     @Override
@@ -178,11 +183,15 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
         @Override
         public String onPlaceholderRequest(Player player, String identifier) {
             if (player == null) {
-                return "0";
+                return placeholderNoCooldown;
             }
 
             if (identifier.equals("cooldown")) {
-                return String.valueOf(getCooldownTimeLeft(player));
+                int timeLeft = getCooldownTimeLeft(player);
+                if (timeLeft <= 0) {
+                    return placeholderNoCooldown;
+                }
+                return String.valueOf(timeLeft);
             }
 
             return null;
