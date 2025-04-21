@@ -7,6 +7,6 @@ messages:
   cooldownExpired: "&aYa puedes lanzar otra Ender Pearl!"
 
   reloadSuccess: "&aConfiguración recargada correctamente!"
-
+# %enderpearlhcn_cooldown%
 placeholder:
   noCooldown: "Sin cooldown"
