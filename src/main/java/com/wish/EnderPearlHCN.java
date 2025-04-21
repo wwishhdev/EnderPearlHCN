@@ -22,7 +22,7 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
 
     private FileConfiguration config;
     private Map<UUID, Long> cooldowns = new HashMap<>();
-    private int cooldownTime; // en segundos
+    private int cooldownTime;
     private String cooldownMessage;
     private String cooldownExpiredMessage;
 
@@ -44,12 +44,12 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
             getLogger().warning("PlaceholderAPI no encontrado, los placeholders no funcionarán!");
         }
 
-        getLogger().info("EnderPearlHCN ha sido habilitado correctamente!");
+        getLogger().info("EnderPearlHCN ha sido habilitado correctamente! by wwishhdev <3");
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("EnderPearlHCN ha sido deshabilitado!");
+        getLogger().info("EnderPearlHCN ha sido deshabilitado! by wwishhdev <3");
     }
 
     private void loadConfig() {
@@ -138,7 +138,7 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
                     player.sendMessage(cooldownExpiredMessage);
                 }
             }
-        }.runTaskLater(this, cooldownTime * 20L); // 20 ticks = 1 segundo
+        }.runTaskLater(this, cooldownTime * 20L);
     }
 
     public int getCooldownTimeLeft(Player player) {
@@ -162,12 +162,12 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
 
         @Override
         public String getAuthor() {
-            return getDescription().getAuthors().toString();
+            return "wwishhdev";
         }
 
         @Override
         public String getVersion() {
-            return getDescription().getVersion();
+            return EnderPearlHCN.this.getDescription().getVersion();
         }
 
         @Override
