@@ -1,12 +1,16 @@
-cooldown: 10
+cooldown: 16
 
 messages:
   # %time% - Tiempo restante en segundos
   cooldown: "&cDebes esperar &e%time% segundos &cpara usar otra Ender Pearl!"
-
   cooldownExpired: "&aYa puedes lanzar otra Ender Pearl!"
-
   reloadSuccess: "&aConfiguración recargada correctamente!"
+
 # %enderpearlhcn_cooldown%
 placeholder:
-  noCooldown: "Sin cooldown"
+  # Dejar vacío para que no se muestre nada cuando no hay cooldown
+  noCooldown: ""
+  # Formato del placeholder cuando hay cooldown, %time% será reemplazado por el tiempo restante
+  format: "&eEnderpearl: &c%time%s"
+  # Formato decimal para mostrar el tiempo (ejemplo: #.# = 8.5, #.## = 8.53)
+  decimalFormat: "#.#"

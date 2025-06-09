@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +27,8 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
     private String cooldownMessage;
     private String cooldownExpiredMessage;
     private String placeholderNoCooldown;
+    private String placeholderFormat;
+    private DecimalFormat decimalFormat;
 
     @Override
     public void onEnable() {
@@ -72,7 +75,13 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
             config.set("messages.reloadSuccess", "&aConfiguración recargada correctamente!");
         }
         if (!config.contains("placeholder.noCooldown")) {
-            config.set("placeholder.noCooldown", "Sin cooldown");
+            config.set("placeholder.noCooldown", "");
+        }
+        if (!config.contains("placeholder.format")) {
+            config.set("placeholder.format", "&eEnderpearl: &c%time%s");
+        }
+        if (!config.contains("placeholder.decimalFormat")) {
+            config.set("placeholder.decimalFormat", "#.#");
         }
 
         saveConfig();
@@ -82,6 +91,8 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
         cooldownMessage = ChatColor.translateAlternateColorCodes('&', config.getString("messages.cooldown"));
         cooldownExpiredMessage = ChatColor.translateAlternateColorCodes('&', config.getString("messages.cooldownExpired"));
         placeholderNoCooldown = config.getString("placeholder.noCooldown");
+        placeholderFormat = ChatColor.translateAlternateColorCodes('&', config.getString("placeholder.format"));
+        decimalFormat = new DecimalFormat(config.getString("placeholder.decimalFormat"));
     }
 
     @Override
@@ -122,12 +133,12 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
 
         // Verificar si el jugador tiene cooldown
         if (cooldowns.containsKey(playerUUID)) {
-            long secondsLeft = ((cooldowns.get(playerUUID) / 1000) + cooldownTime) - (System.currentTimeMillis() / 1000);
+            double secondsLeft = getCooldownTimeLeft(player);
 
             if (secondsLeft > 0) {
                 // Todavía está en cooldown, cancelar el evento
                 event.setCancelled(true);
-                player.sendMessage(cooldownMessage.replace("%time%", String.valueOf(secondsLeft)));
+                player.sendMessage(cooldownMessage.replace("%time%", String.valueOf((int)secondsLeft)));
                 return;
             }
         }
@@ -146,12 +157,12 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
         }.runTaskLater(this, cooldownTime * 20L);
     }
 
-    public int getCooldownTimeLeft(Player player) {
+    public double getCooldownTimeLeft(Player player) {
         UUID playerUUID = player.getUniqueId();
         if (cooldowns.containsKey(playerUUID)) {
-            long secondsLeft = ((cooldowns.get(playerUUID) / 1000) + cooldownTime) - (System.currentTimeMillis() / 1000);
+            double secondsLeft = ((cooldowns.get(playerUUID) / 1000.0) + cooldownTime) - (System.currentTimeMillis() / 1000.0);
             if (secondsLeft > 0) {
-                return (int) secondsLeft;
+                return secondsLeft;
             }
         }
         return 0;
@@ -187,11 +198,11 @@ public class EnderPearlHCN extends JavaPlugin implements Listener {
             }
 
             if (identifier.equals("cooldown")) {
-                int timeLeft = getCooldownTimeLeft(player);
+                double timeLeft = getCooldownTimeLeft(player);
                 if (timeLeft <= 0) {
                     return placeholderNoCooldown;
                 }
-                return String.valueOf(timeLeft);
+                return placeholderFormat.replace("%time%", decimalFormat.format(timeLeft));
             }
 
             return null;
